@@ -22,6 +22,8 @@ public class LetterContainer : MonoBehaviour
     public void Initialize()
     {
         letter.text = "";
+        letterContainer.color = Color.white;
+
     }
 
     public void setLetter(char letter)

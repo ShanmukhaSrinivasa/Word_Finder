@@ -11,7 +11,34 @@ public class KeyboardColorizer : MonoBehaviour
     }
     void Start()
     {
-        
+        GameManager.OnGameStateChanged += GameStateChangedCallBack;
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.OnGameStateChanged -= GameStateChangedCallBack;
+    }
+
+    private void GameStateChangedCallBack(GameState gameState)
+    {
+        switch (gameState)
+        {
+            case GameState.Game:
+                Initialize();
+                break;
+
+            case GameState.LevelComplete:
+                
+                break;
+        }
+    }
+
+    private void Initialize()
+    {
+        for (int i = 0; i < keys.Length; i++)
+        {
+            keys[i].Initialize();
+        }
     }
 
     // Update is called once per frame
