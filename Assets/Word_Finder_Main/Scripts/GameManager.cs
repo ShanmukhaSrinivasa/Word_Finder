@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        //gameState = GameState.Game;
     }
 
     void Start()
@@ -44,6 +46,17 @@ public class GameManager : MonoBehaviour
     {
         SetGameState(GameState.Game);
 
+    }
+
+    public void PlayButtonCallBack()
+    {
+        SetGameState(GameState.Game);
+
+    }
+
+    public void BackButtonCallBack()
+    {
+        SetGameState(GameState.Menu);
     }
 
     public bool IsGameState()

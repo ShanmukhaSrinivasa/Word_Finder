@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class Input_Manager : MonoBehaviour
 {
+    public static Input_Manager Instance;
+
     [Header("Elements")]
     [SerializeField] private WordContainer[] wordContainers;
     [SerializeField] private Button tryButton;
@@ -14,6 +16,19 @@ public class Input_Manager : MonoBehaviour
     [Header("Settings")]
     private int currentWordContainerIndex;
     private bool canAddLetters = true;
+    private bool shouldReset;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
@@ -34,11 +49,18 @@ public class Input_Manager : MonoBehaviour
         switch (gameState)
         {
             case GameState.Game:
-                Initialize();
+                if (shouldReset)
+                {
+                    Initialize();
+                }
                 break;
 
             case GameState.LevelComplete:
-                
+                shouldReset = true;
+                break;
+
+            case GameState.GameOver:
+                shouldReset = true;
                 break;
         }
     }
@@ -59,6 +81,8 @@ public class Input_Manager : MonoBehaviour
         {
             wordContainers[i].Initialize();
         }
+
+        shouldReset = false;
     }
     private void KeyPressedCallBack(char letter)
     {
@@ -98,8 +122,8 @@ public class Input_Manager : MonoBehaviour
 
             if (currentWordContainerIndex >= wordContainers.Length)
             {
-                GameManager.Instance.SetGameState(GameState.GameOver);
                 DataManager.instance.ResetScore();
+                GameManager.Instance.SetGameState(GameState.GameOver);
             }
             else
             {
@@ -132,12 +156,13 @@ public class Input_Manager : MonoBehaviour
         }
 
         bool removedLetter = wordContainers[currentWordContainerIndex].RemoveLetter();
-        canAddLetters = true;
 
         if (removedLetter)
         {
             DisableTryButton();
         }
+
+        canAddLetters = true;
     }
 
     private void EnableTryButton()
@@ -148,5 +173,10 @@ public class Input_Manager : MonoBehaviour
     private void DisableTryButton()
     {
         tryButton.interactable = false;
+    }
+
+    public WordContainer GetCurrentWordContainer()
+    {
+        return wordContainers[currentWordContainerIndex];
     }
 }

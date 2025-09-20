@@ -44,6 +44,11 @@ public class WordContainer : MonoBehaviour
         currentLetterContainerIndex++;
     }
 
+    public void AddAsHint(int letterIndex, char letter)
+    {
+        letterContainers[letterIndex].setLetter(letter, true);
+    }
+
     public bool RemoveLetter()
     {
         if(currentLetterContainerIndex <= 0)
