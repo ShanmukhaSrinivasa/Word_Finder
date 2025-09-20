@@ -18,6 +18,10 @@ public class Input_Manager : MonoBehaviour
     private bool canAddLetters = true;
     private bool shouldReset;
 
+    [Header("Events")]
+    public static Action onLetterAdded;
+    public static Action onLetterRemoved;
+
     private void Awake()
     {
         if (Instance == null)
@@ -99,6 +103,8 @@ public class Input_Manager : MonoBehaviour
             EnableTryButton();
             
         }
+
+        onLetterAdded?.Invoke();
     }
 
     public void CheckWord()
@@ -163,6 +169,8 @@ public class Input_Manager : MonoBehaviour
         }
 
         canAddLetters = true;
+
+        onLetterRemoved?.Invoke();
     }
 
     private void EnableTryButton()
