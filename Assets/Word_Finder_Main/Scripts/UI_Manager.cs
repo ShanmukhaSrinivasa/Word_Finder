@@ -53,17 +53,27 @@ public class UI_Manager : MonoBehaviour
         HideGameOver();
 
         GameManager.OnGameStateChanged += GameStateChangedCallBack;
+        DataManager.OnCoinsUpdate += UpdateCoinsTexts;
     }
 
     private void OnDestroy()
     {
         GameManager.OnGameStateChanged -= GameStateChangedCallBack;
+        DataManager.OnCoinsUpdate -= UpdateCoinsTexts;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void UpdateCoinsTexts()
+    {
+        menuCoins.text = DataManager.instance.GetCoins().ToString();
+        gameCoins.text = menuCoins.text;
+        levelCompleteCoins.text = menuCoins.text;
+        gameOverCoins.text = menuCoins.text;
     }
 
     private void GameStateChangedCallBack(GameState gameState)

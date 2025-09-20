@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class HintManager : MonoBehaviour
@@ -8,7 +9,14 @@ public class HintManager : MonoBehaviour
     [SerializeField] private GameObject keyboard;
     private KeyboardKey[] keys;
 
+
+    [Header("Text Elements")]
+    [SerializeField] private TextMeshProUGUI keyboardHintPriceText;
+    [SerializeField] private TextMeshProUGUI letterHintPriceText;
+
     [Header("settings")]
+    [SerializeField] private int keyboardHintPrice;
+    [SerializeField] private int letterHintPrice;
     private bool shouldReset;
 
     private void Awake()
@@ -18,6 +26,9 @@ public class HintManager : MonoBehaviour
 
     void Start()
     {
+        keyboardHintPriceText.text = keyboardHintPrice.ToString();
+        letterHintPriceText.text = letterHintPrice.ToString();
+
         GameManager.OnGameStateChanged += GameStateChangedCallBack;
     }
 
@@ -61,6 +72,11 @@ public class HintManager : MonoBehaviour
 
     public void KeyboardHint()
     {
+        if (DataManager.instance.GetCoins() < keyboardHintPrice)
+        {
+            return;
+        }
+
         string secretWord = WordManager.instance.GetSecretWord();
 
         List<KeyboardKey> untouchedKeys = new List<KeyboardKey>();
@@ -95,11 +111,18 @@ public class HintManager : MonoBehaviour
 
         int randomKeyIndex = Random.Range(0, temp_untouchedKeys.Count);
         temp_untouchedKeys[randomKeyIndex].SetInvalid();
+
+        DataManager.instance.RemoveCoins(keyboardHintPrice);
     }
 
     List<int> letterHintGivenIndices = new List<int>();
     public void LetterHint()
     {
+        if (DataManager.instance.GetCoins() < letterHintPrice)
+        {
+            return;
+        }
+
         if (letterHintGivenIndices.Count >= 5)
         {
             return;
@@ -123,5 +146,7 @@ public class HintManager : MonoBehaviour
         letterHintGivenIndices.Add(randomKeyIndex);
 
         currentWordContainer.AddAsHint(randomKeyIndex, secretWord[randomKeyIndex]);
+
+        DataManager.instance.RemoveCoins(letterHintPrice);
     }
 }

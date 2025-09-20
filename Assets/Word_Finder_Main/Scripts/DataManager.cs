@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class DataManager : MonoBehaviour
@@ -9,6 +10,9 @@ public class DataManager : MonoBehaviour
     private int coins;
     private int score;
     private int bestScore;
+
+    [Header("Events")]
+    public static Action OnCoinsUpdate;
 
     private void Awake()
     {
@@ -38,6 +42,7 @@ public class DataManager : MonoBehaviour
     {
         coins += amount;
         SaveData();
+        OnCoinsUpdate?.Invoke();
     }
 
     public void RemoveCoins(int amount)
@@ -45,6 +50,7 @@ public class DataManager : MonoBehaviour
         coins -= amount;
         coins = Mathf.Max(coins, 0);
         SaveData();
+        OnCoinsUpdate?.Invoke();
     }
 
     public void IncreaseScore(int amount)
