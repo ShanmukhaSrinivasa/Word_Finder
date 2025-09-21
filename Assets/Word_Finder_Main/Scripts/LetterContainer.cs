@@ -58,6 +58,10 @@ public class LetterContainer : MonoBehaviour
 
     public char GetLetter()
     {
+        if (string.IsNullOrEmpty(letter.text))
+        {
+            return ' ';
+        }
         return letter.text[0];
     }
 }

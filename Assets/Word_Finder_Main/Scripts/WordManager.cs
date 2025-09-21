@@ -14,7 +14,7 @@ public class WordManager : MonoBehaviour
 
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
         }
@@ -42,7 +42,7 @@ public class WordManager : MonoBehaviour
         switch (gameState)
         {
             case GameState.Menu:
-                
+
                 break;
 
             case GameState.Game:
@@ -66,7 +66,7 @@ public class WordManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public string GetSecretWord()

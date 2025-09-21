@@ -74,10 +74,52 @@ public class WordContainer : MonoBehaviour
         return word;
     }
 
+    public void ObsoleteColorize(string secretWord)
+    {
+        List<char> chars = new List<char>(secretWord.Length);
+
+        for (int i = 0; i < secretWord.Length; i++)
+        {
+            chars.Add(secretWord[i]);
+        }
+
+        for (int i = 0; i < letterContainers.Length; i++)
+        {
+            char letter = letterContainers[i].GetLetter();
+
+            if (letter == secretWord[i])
+            {
+                //Valid
+                letterContainers[i].SetValid();
+                chars.Remove(letter);
+            }
+            else if (chars.Contains(letter))
+            {
+                //potential
+                letterContainers[i].SetPotential();
+                chars.Remove(letter);
+            }
+            else
+            {
+                //Invalid
+                letterContainers[i].SetInvalid();
+            }
+        }
+    }
+
     public void Colorize(string secretWord)
     {
-        List<char> chars = new List<char>(secretWord.ToCharArray());
+        List<char> chars = new List<char>(secretWord.Length);
 
+        for (int i = 0; i < secretWord.Length; i++)
+        {
+            chars.Add(secretWord[i]);
+        }
+
+        List<int> coveredIndices = new List<int>();
+
+
+        //1st Pass
         for (int i = 0; i < letterContainers.Length; i++)
         {
             char letterToCheck = letterContainers[i].GetLetter();
@@ -87,12 +129,25 @@ public class WordContainer : MonoBehaviour
                 //Valid
                 letterContainers[i].SetValid();
                 chars.Remove(letterToCheck);
+                coveredIndices.Add(i);
             }
-            else if (chars.Contains(letterToCheck))
+        }
+
+        //2nd Pass
+        for (int i = 0; i < letterContainers.Length; i++)
+        {
+            if (coveredIndices.Contains(i))
+            {
+                continue;
+            }
+
+            char letter = letterContainers[i].GetLetter();
+
+            if (chars.Contains(letter))
             {
                 //potential
                 letterContainers[i].SetPotential();
-                chars.Remove(letterToCheck);
+                chars.Remove(letter);
             }
             else
             {

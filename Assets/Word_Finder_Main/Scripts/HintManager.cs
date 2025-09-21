@@ -128,21 +128,27 @@ public class HintManager : MonoBehaviour
             return;
         }
 
-        List<int> letterHintNotGivenIndices = new List<int>();
+        WordContainer currentWordContainer = Input_Manager.Instance.GetCurrentWordContainer();
+        WordContainer previousWordContainer = Input_Manager.Instance.GetPreviousWordContainer();
+        string secretWord = WordManager.instance.GetSecretWord();
+        string playerWord = previousWordContainer.GetWord();
+
+        List<int> possibleHintIndices = new List<int>();
 
         for (int i = 0; i < 5; i++)
         {
-            if (!letterHintGivenIndices.Contains(i))
+            if (!letterHintGivenIndices.Contains(i) && playerWord[i] != secretWord[i])
             {
-                letterHintNotGivenIndices.Add(i);
+                possibleHintIndices.Add(i);
             }
         }
 
-        WordContainer currentWordContainer = Input_Manager.Instance.GetCurrentWordContainer();
+        if (possibleHintIndices.Count == 0)
+        {
+            return;
+        }
 
-        string secretWord = WordManager.instance.GetSecretWord();
-
-        int randomKeyIndex = letterHintNotGivenIndices[Random.Range(0, letterHintNotGivenIndices.Count)];
+        int randomKeyIndex = possibleHintIndices[Random.Range(0, possibleHintIndices.Count)];
         letterHintGivenIndices.Add(randomKeyIndex);
 
         currentWordContainer.AddAsHint(randomKeyIndex, secretWord[randomKeyIndex]);

@@ -71,7 +71,7 @@ public class Input_Manager : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
     private void Initialize()
@@ -101,7 +101,7 @@ public class Input_Manager : MonoBehaviour
         {
             canAddLetters = false;
             EnableTryButton();
-            
+
         }
 
         onLetterAdded?.Invoke();
@@ -118,7 +118,7 @@ public class Input_Manager : MonoBehaviour
         if (secretWord == WordToCheck)
         {
             SetLevelComplete();
-            
+
         }
         else
         {
@@ -186,5 +186,17 @@ public class Input_Manager : MonoBehaviour
     public WordContainer GetCurrentWordContainer()
     {
         return wordContainers[currentWordContainerIndex];
+    }
+
+    public WordContainer GetPreviousWordContainer()
+    {
+        int previousIndex = currentWordContainerIndex - 1;
+
+        if (previousIndex < 0)
+        {
+            previousIndex = 0;
+        }
+
+        return wordContainers[previousIndex];
     }
 }
