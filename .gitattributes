@@ -1,2 +1,8 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Ignore Unity-specific files in language statistics
+*.mat linguist-vendored
+*.shader linguist-vendored
+*.hlsl linguist-vendored
+*.cginc linguist-vendored
